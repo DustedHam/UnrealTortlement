@@ -1,0 +1,3 @@
+[submodule "Assets/SatlboxGame.Common"]
+	path = Assets/SatlboxGame.Common
+	url = git@github.com:SaltboxGames/SaltboxGames.Common.git
