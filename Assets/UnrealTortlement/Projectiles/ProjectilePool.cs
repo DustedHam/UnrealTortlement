@@ -3,15 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace UnrealTortlement.projectiles
+namespace UnrealTortlement.Projectiles
 {
     public class ProjectilePool
     {
-        public GameObject prefab;
+        private GameObject prefab;
         private Pool<Projectile> pool;
 
-        private void Awake()
+        public ProjectilePool(GameObject prefab)
         {
+            this.prefab = prefab;
             pool = new Pool<Projectile>(createBullet);
         }
 
@@ -19,6 +20,7 @@ namespace UnrealTortlement.projectiles
         {
             Projectile projectile = pool.Take();
             projectile.gameObject.SetActive(true);
+            projectile.transform.forward = velocity.normalized;
             projectile.init(this, position, velocity);
             return projectile;
         }

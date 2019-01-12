@@ -75,6 +75,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c693da95017c1548aff6f6ccb3e7b0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _spawnPoint: {fileID: 2267313111319038474}
+  _muzzleVelocity: 50
+  _ammoWorth: 30
+  _ammoCost: 1
+  _ammoType: 0
+  _isAuto: 0
+  _coolDownTime: 0
 --- !u!1001 &2267313112059115746
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -1,4 +1,5 @@
 ﻿using SaltboxGames.Common.Utils;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,10 +9,10 @@ using UnrealTortlement.Weapons;
 namespace UnrealTortlement.Turtle
 {   
     [RequireComponent(typeof(Rigidbody))]
-    public class Turtle : MonoBehaviour
+    public class Player : MonoBehaviour
     {
         [SerializeField]
-        private Camera _playerCamera;
+        public Camera _camera;
 
         [SerializeField]
         private float _speed = 5f;
@@ -52,14 +53,21 @@ namespace UnrealTortlement.Turtle
         [SerializeField, ReadOnlyField]
         private bool isGrounded = true;
 
-        [SerializeField]
-        private Weapon _equipped;
+        
+        [SerializeField, ReadOnlyField]
+        private int[] ammo;
+        private List<Weapon> inventory;
+        private int weaponIndex = -1;
 
         private int ignoreMask;
 
         private void Start()
         {
-            ignoreMask = ~(1 << gameObject.layer);
+            //Ignore this player, and the raycast ignore layer
+            ignoreMask = ~(1 << gameObject.layer | 1 << 2);
+
+            ammo = new int[Enum.GetNames(typeof(AmmoType)).Length];
+            inventory = new List<Weapon>();
         }
 
         private void OnEnable()
@@ -72,9 +80,43 @@ namespace UnrealTortlement.Turtle
             Cursor.lockState = CursorLockMode.None;
         }
 
+        public void PickUpWeapon(Weapon weap)
+        {
+            ammo[(int)weap._ammoType] += weap._ammoWorth;
+            if (hasWeapon(weap))
+            {
+                Destroy(weap.gameObject);
+            }
+            else
+            {
+                inventory.Add(weap);
+                if(weaponIndex == -1)
+                {
+                    weaponIndex = 0;
+                }
+                else
+                {
+                    weap.gameObject.SetActive(false);
+                }
+            }
+        }
+
+        private bool hasWeapon(Weapon weapon)
+        {
+            Type weapType = weapon.GetType();
+            for (int i = 0; i < inventory.Count; i++)
+            {
+                if(inventory[i].GetType() == weapType)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         private void Update()
         {
-            Transform cameraTransfrom = _playerCamera.transform;
+            Transform cameraTransfrom = _camera.transform;
             Vector3 cameraPosition = cameraTransfrom.position;
             Vector3 cameraForward = cameraTransfrom.forward;
             Vector3 cameraRight= cameraTransfrom.right;
@@ -92,38 +134,49 @@ namespace UnrealTortlement.Turtle
                 _rigidbody.AddForce(Vector3.up * Mathf.Sqrt(_jumpHeight * -2f * Physics.gravity.y), ForceMode.VelocityChange);
             }
 
-            if (_equipped != null)
+            if (weaponIndex > -1)
             {
-                _equipped.transform.position = _weaponPoint.position;
+                Weapon current = inventory[weaponIndex];
+                current.transform.position = _weaponPoint.position;
 
                 if (Input.GetButtonDown(_controls.Fire))
                 {
                     Cursor.lockState = CursorLockMode.Locked;
-                    _equipped.tryFire();
+                    int currentAmmo = ammo[(int)current._ammoType];
+
+                    if(currentAmmo >= current._ammoCost)
+                    {
+                        if (current.tryFire())
+                        {
+                            currentAmmo -= current._ammoCost;
+                        }
+                    }
+
+                    ammo[(int)current._ammoType] = currentAmmo;
                 }
            
                 RaycastHit hit;
                 if (Physics.Raycast(cameraPosition, cameraForward, out hit, Mathf.Infinity, ignoreMask))
                 {
-                    _equipped.transform.LookAt(hit.point);
+                    current.transform.LookAt(hit.point);
                 }
                 else
                 {
-                    _equipped.transform.LookAt(cameraForward * 100); //TODO: Lerp to this;
+                    current.transform.LookAt(cameraForward * 100); //TODO: Lerp to this;
                 }
 
                 Debug.DrawRay(cameraPosition, cameraForward * 1000, Color.red);
             }
 
             // Camera rotation
-            _playerCamera.transform.position = _cameraPoint.position;
+            _camera.transform.position = _cameraPoint.position;
 
             yaw += camera_speedH * Input.GetAxis("Mouse X");
             pitch -= camera_speedV * Input.GetAxis("Mouse Y");
             pitch = Mathf.Clamp(pitch, -35, 75);
 
             transform.eulerAngles = new Vector3(0, yaw, 0);
-            _playerCamera.transform.eulerAngles = new Vector3(pitch, yaw, 0.0f);
+            _camera.transform.eulerAngles = new Vector3(pitch, yaw, 0.0f);
 
 
             if (Input.GetKey(KeyCode.Escape))
