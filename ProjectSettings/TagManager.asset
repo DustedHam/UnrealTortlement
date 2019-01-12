@@ -13,7 +13,10 @@ TagManager:
   - UI
   - 
   - 
-  - PostProcessing
+  - Player1
+  - Player2
+  - Player3
+  - Player4
   - 
   - 
   - 
@@ -33,10 +36,7 @@ TagManager:
   - 
   - 
   - 
-  - 
-  - 
-  - 
-  - 
+  - Ground
   m_SortingLayers:
   - name: Default
     uniqueID: 0
