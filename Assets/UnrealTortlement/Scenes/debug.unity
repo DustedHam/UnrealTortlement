@@ -673,6 +673,7 @@ MonoBehaviour:
     type: 3}
   WeaponPrefabs:
   - {fileID: 2267313112041242687, guid: 4e5a2c94380176544aedc66263024641, type: 3}
+  - {fileID: 1339949131599914737, guid: dd6c8c43d8309db468d335ca96cfceb5, type: 3}
 --- !u!4 &1486933254
 Transform:
   m_ObjectHideFlags: 0
