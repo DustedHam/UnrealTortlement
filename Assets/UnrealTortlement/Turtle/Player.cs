@@ -13,6 +13,7 @@ namespace UnrealTortlement.Turtle
     {
         public Action<string> onKilled;
         public Action<float, float> onHealthChange;
+        public Action<int, int> onAmmoChange;
         public Action<Weapon> onWeaponChange;
 
         [SerializeField]
@@ -79,7 +80,7 @@ namespace UnrealTortlement.Turtle
             }
         }
 
-        public string playerName;
+        public string _name;
 
         private int ignoreMask;
 
@@ -133,15 +134,51 @@ namespace UnrealTortlement.Turtle
 
         private bool hasWeapon(Weapon weapon)
         {
-            Type weapType = weapon.GetType();
+            string name = weapon._name;
             for (int i = 0; i < inventory.Count; i++)
             {
-                if(inventory[i].GetType() == weapType)
+                if(inventory[i]._name == name)
                 {
                     return true;
                 }
             }
             return false;
+        }
+
+        private void nextWeapon()
+        {
+            if(inventory.Count == 0)
+            {
+                weaponIndex = -1;
+                return;
+            }
+            int lastWeap = weaponIndex;
+            weaponIndex = (weaponIndex + 1) % inventory.Count;
+
+            if (lastWeap != weaponIndex)
+            {
+                inventory[lastWeap].gameObject.SetActive(false);
+                inventory[weaponIndex].gameObject.SetActive(true);
+                onWeaponChange?.Invoke(inventory[weaponIndex]);
+            }
+        }
+
+        private void previousWeapon()
+        {
+            if (inventory.Count == 0)
+            {
+                weaponIndex = -1;
+                return;
+            }
+            int lastWeap = weaponIndex;
+            weaponIndex = Math.Abs((weaponIndex - 1)) % inventory.Count;
+
+            if(lastWeap != weaponIndex)
+            {
+                inventory[lastWeap].gameObject.SetActive(false);
+                inventory[weaponIndex].gameObject.SetActive(true);
+                onWeaponChange?.Invoke(inventory[weaponIndex]);
+            }
         }
 
         public void hurt(float value, string sender)
@@ -150,9 +187,6 @@ namespace UnrealTortlement.Turtle
             if(Health == 0)
             {
                 onKilled?.Invoke(sender);
-                //SPAWN GIBS
-
-                //SHOW RESPAWN UI
 
                 Game.respawnPlayer(this);
                 //reset
@@ -170,6 +204,8 @@ namespace UnrealTortlement.Turtle
         {
             Health = Mathf.Min(Health + value, maxHealth);
         }
+
+        private bool axisDown = false;
 
         private void Update()
         {
@@ -189,6 +225,23 @@ namespace UnrealTortlement.Turtle
             //model.forward = (transform.forward * vertical) + (transform.right * horizontal);
 
             animator.SetBool("Walking", (inputs.sqrMagnitude > 0.1f));
+
+            float wepAxis = Input.GetAxis(_controls.ChangeWeap);
+            wepAxis = Mathf.Ceil(Mathf.Abs(wepAxis)) * Mathf.Sign(wepAxis);
+            if(wepAxis >= 1 && !axisDown)
+            {
+                nextWeapon();
+                axisDown = true;
+            }
+            else if(wepAxis <= -1 && !axisDown)
+            {
+                previousWeapon();
+                axisDown = true;
+            }
+            else if (wepAxis == 0 && axisDown)
+            {
+                axisDown = false;
+            }
 
             if (Input.GetButtonDown(_controls.Jump) && isGrounded)
             {
@@ -216,13 +269,14 @@ namespace UnrealTortlement.Turtle
 
                     if (currentAmmo >= current._ammoCost)
                     {
-                        if (current.tryFire(playerName))
+                        if (current.tryFire(_name))
                         {
                             currentAmmo -= current._ammoCost;
                         }
                     }
 
                     ammo[(int)current._ammoType] = currentAmmo;
+                    onAmmoChange?.Invoke((int)current._ammoType, currentAmmo);
                 }
 
                 RaycastHit hit;

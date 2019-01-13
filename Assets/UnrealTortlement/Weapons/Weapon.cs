@@ -13,6 +13,8 @@ namespace UnrealTortlement.Weapons
 
     public class Weapon : MonoBehaviour
     {
+        public string _name;
+
         [SerializeField]
         private Transform _spawnPoint;
         [SerializeField]

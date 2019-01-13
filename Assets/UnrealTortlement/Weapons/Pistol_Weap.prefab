@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c693da95017c1548aff6f6ccb3e7b0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _name: Pistol
   _spawnPoint: {fileID: 3302090699987535521}
   _muzzleVelocity: 40
   damage: 20
