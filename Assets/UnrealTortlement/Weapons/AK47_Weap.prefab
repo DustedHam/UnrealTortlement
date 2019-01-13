@@ -75,16 +75,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c693da95017c1548aff6f6ccb3e7b0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _name: AK-74
   _spawnPoint: {fileID: 2267313111319038474}
   _muzzleVelocity: 50
   damage: 25
   _ammoWorth: 30
   _ammoCost: 3
+  _clipSize: 15
+  _ammoCount: 0
   _ammoType: 0
   _fireMode: 1
   _coolDownTime: 0.4
   _burstDelay: 0.1
   _burstCount: 3
+  _reloadTime: 1
+  isReloading: 0
 --- !u!1001 &2267313112059115746
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -18,6 +18,8 @@ namespace UnrealTortlement.Turtle
 
         //Weapons
         public string Fire;
+        public string ChangeWeap;
+        public string Reload;
 
         //UI
 

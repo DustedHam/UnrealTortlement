@@ -15,20 +15,25 @@ namespace UnrealTortlement
     {
         private static GameManager manager;
 
+        public static Action<string> onGameOver;
+
         public static List<PlayerSpawnPoint> spawnPoints = new List<PlayerSpawnPoint>();
         public static Dictionary<string, PlayerInputs> controlMaps;
 
         public static ProjectilePool bulletPool;
         public static List<Player> players = new List<Player>();
 
+        public static Dictionary<string, int> playerScores;
+
         public static void Init(GameManager gameManager)
         {
             manager = gameManager;
-
             bulletPool = new ProjectilePool(manager.BulletPrefab);
 
             controlMaps = new Dictionary<string, PlayerInputs>();
             initControlMaps();
+
+            playerScores = new Dictionary<string, int>();
         }
 
         public static void respawnPlayer(Player player)
@@ -74,6 +79,21 @@ namespace UnrealTortlement
             return true;
         }
 
+        public static void IncrementScore(string playerName)
+        {
+            playerScores.AddorUpdate(playerName, 1, (score) =>
+            {
+                int val = score + 1;
+                Debug.Log($"{playerName} {val}");
+                if (score >= manager.scoreToWin)
+                {
+                    Debug.Log("Game Over");
+                    Game.onGameOver?.Invoke(playerName);
+                }
+                return val;
+            });
+        }
+
         private static void initControlMaps()
         {
             controlMaps.Add("Keyboard", new PlayerInputs()
@@ -85,7 +105,9 @@ namespace UnrealTortlement
                 Jump = "Jump",
                 Fire = "Fire1",
                 Yaw = "Mouse X",
-                Pitch = "Mouse Y"
+                Pitch = "Mouse Y",
+                ChangeWeap = "CWeap",
+                Reload = "Reload",
             });
             controlMaps.Add("Joystick1", new PlayerInputs()
             {
@@ -96,7 +118,9 @@ namespace UnrealTortlement
                 Jump = "Joystick1-Jump",
                 Fire = "Joystick1-Fire",
                 Yaw = "Joystick1-ViewX",
-                Pitch = "Joystick1-ViewY"
+                Pitch = "Joystick1-ViewY",
+                ChangeWeap = "Joystick1-CWeap",
+                Reload = "Joystick1-Reload"
             });
             controlMaps.Add("Joystick2", new PlayerInputs()
             {
@@ -107,7 +131,10 @@ namespace UnrealTortlement
                 Jump = "Joystick2-Jump",
                 Fire = "Joystick2-Fire",
                 Yaw = "Joystick2-ViewX",
-                Pitch = "Joystick2-ViewY"
+                Pitch = "Joystick2-ViewY",
+                ChangeWeap = "Joystick2-CWeap",
+                Reload = "Joystick2-Reload"
+
             });
         }
     }
