@@ -7,13 +7,13 @@ using UnrealTortlement.Weapons;
 
 public class TitleScene : MonoBehaviour
 {
-
-    [SerializeField]Weapon AK;
+    [SerializeField]
+    Weapon weapon;
 
     void Awake()
     {
-        AK.gameObject.SetActive(false);
-        AK.Reload();
+        weapon.gameObject.SetActive(false);
+        weapon.Reload(15);
     }
 
     // Start is called before the first frame update
@@ -29,21 +29,17 @@ public class TitleScene : MonoBehaviour
 
     public void Play()
     {
-        AK.gameObject.SetActive(true);
-        startCoroutine("PlayCoroutine");
+        weapon.gameObject.SetActive(true);
+        StartCoroutine("PlayCoroutine");
     }
 
     IEnumerator PlayCoroutine()
     {
         for(var i = 0; i < 5;i++)
         {
-            AK.tryFire();
-            var startTime = Time.deltaTime;
-            while(startTime.deltaTime - startTime < 0.5)
-            {
-                yield return null;
-            }
-            AK.tryFire();
+            weapon.tryFire("");
+            yield return new WaitForSeconds(0.5f);           
+            weapon.tryFire("");
         }
         ChangeScene("map1");
     }
