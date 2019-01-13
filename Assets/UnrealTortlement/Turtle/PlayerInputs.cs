@@ -15,6 +15,7 @@ namespace UnrealTortlement.Turtle
         public string Yaw;
         public string Pitch;
         public string Jump;
+        public string Hide;
 
         //Weapons
         public string Fire;

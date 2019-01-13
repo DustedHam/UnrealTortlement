@@ -84,10 +84,10 @@ namespace UnrealTortlement
             playerScores.AddorUpdate(playerName, 1, (score) =>
             {
                 int val = score + 1;
-                Debug.Log($"{playerName} {val}");
+                //Debug.Log($"{playerName} {val}");
                 if (score >= manager.scoreToWin)
                 {
-                    Debug.Log("Game Over");
+                    //Debug.Log("Game Over");
                     Game.onGameOver?.Invoke(playerName);
                 }
                 return val;
@@ -108,6 +108,7 @@ namespace UnrealTortlement
                 Pitch = "Mouse Y",
                 ChangeWeap = "CWeap",
                 Reload = "Reload",
+                Hide = "Hide"
             });
             controlMaps.Add("Joystick1", new PlayerInputs()
             {
@@ -120,7 +121,8 @@ namespace UnrealTortlement
                 Yaw = "Joystick1-ViewX",
                 Pitch = "Joystick1-ViewY",
                 ChangeWeap = "Joystick1-CWeap",
-                Reload = "Joystick1-Reload"
+                Reload = "Joystick1-Reload",
+                Hide = "Joystick1-Hide"
             });
             controlMaps.Add("Joystick2", new PlayerInputs()
             {
@@ -133,8 +135,8 @@ namespace UnrealTortlement
                 Yaw = "Joystick2-ViewX",
                 Pitch = "Joystick2-ViewY",
                 ChangeWeap = "Joystick2-CWeap",
-                Reload = "Joystick2-Reload"
-
+                Reload = "Joystick2-Reload",
+                Hide = "Joystick2-Hide"
             });
         }
     }

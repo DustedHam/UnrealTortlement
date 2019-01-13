@@ -36,22 +36,33 @@ namespace UnrealTortlement.Turtle
         [SerializeField]
         private Rigidbody _rigidbody;
         [SerializeField]
+        private SphereCollider _collider;
+        [SerializeField]
         private LayerMask _ground;
 
-        [SerializeField]
+        [SerializeField, ReadOnlyField]
         private float yaw = 0.0f;
-        [SerializeField]
+        [SerializeField, ReadOnlyField]
         private float pitch = 0.0f;
 
         public PlayerInputs _controls;
 
         [SerializeField]
         private Animator animator;
-    //    [SerializeField]
-    //    private Transform model;
+        [SerializeField]
+        private Renderer fullModel;
+        [SerializeField]
+        private Renderer shellModel;
 
         [SerializeField, ReadOnlyField]
         private Vector3 inputs = Vector3.zero;
+
+        [SerializeField, ReadOnlyField]
+        private bool isHiding;
+        [SerializeField]
+        private float _hidingSpeedMult;
+        [SerializeField]
+        private float _hidingDamageMult;
 
         [SerializeField, ReadOnlyField]
         private Vector3 velocity = Vector3.zero;  
@@ -183,6 +194,11 @@ namespace UnrealTortlement.Turtle
 
         public void hurt(float value, string sender)
         {
+            if(isHiding)
+            {
+                value *= _hidingDamageMult;
+            }
+
             Health = Mathf.Max(Health - value, 0);
             if(Health == 0)
             {
@@ -246,6 +262,21 @@ namespace UnrealTortlement.Turtle
             if (Input.GetButtonDown(_controls.Jump) && isGrounded)
             {
                 _rigidbody.AddForce(Vector3.up * Mathf.Sqrt(_jumpHeight * -2f * Physics.gravity.y), ForceMode.VelocityChange);
+            }
+
+            if(Input.GetButtonDown(_controls.Hide))
+            {
+                isHiding = true;
+                fullModel.enabled = false;
+                shellModel.enabled = true;
+                _collider.radius = 0.35f;
+            }
+            else if(Input.GetButtonUp(_controls.Hide))
+            {
+                isHiding = false;
+                fullModel.enabled = true;
+                shellModel.enabled = false;
+                _collider.radius = 0.45f;
             }
 
             if (weaponIndex > -1)
@@ -324,7 +355,15 @@ namespace UnrealTortlement.Turtle
 
         void FixedUpdate()
         {
-            _rigidbody.MovePosition(_rigidbody.position + inputs * _speed * Time.fixedDeltaTime);
+            float speed = _speed;
+            if(isHiding)
+            {
+                speed *= _hidingSpeedMult;
+            }
+
+            inputs.y = 0;
+
+            _rigidbody.MovePosition(_rigidbody.position + inputs * speed * Time.fixedDeltaTime);
         }
     }
 }
