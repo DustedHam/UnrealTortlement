@@ -77,11 +77,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _spawnPoint: {fileID: 2267313111319038474}
   _muzzleVelocity: 50
+  damage: 25
   _ammoWorth: 30
-  _ammoCost: 1
+  _ammoCost: 3
   _ammoType: 0
-  _isAuto: 0
-  _coolDownTime: 0
+  _fireMode: 1
+  _coolDownTime: 0.4
+  _burstDelay: 0.1
+  _burstCount: 3
 --- !u!1001 &2267313112059115746
 PrefabInstance:
   m_ObjectHideFlags: 0

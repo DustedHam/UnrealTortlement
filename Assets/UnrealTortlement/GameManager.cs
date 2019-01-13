@@ -27,8 +27,8 @@ namespace UnrealTortlement
 
         private void StartGame()
         {
-            SpawnPlayer(Game.controlMaps["Keyboard"], Game.getSpawnPoint(10), new Rect(0, 0, 1, 0.5f));
-            SpawnPlayer(Game.controlMaps["Joystick1"], Game.getSpawnPoint(10), new Rect(0, 0.5f, 1, 0.5f));
+            SpawnPlayer(Game.controlMaps["Keyboard"], Game.getSpawnPoint(10), new Rect(0, 0, 1, 0.49f));
+            SpawnPlayer(Game.controlMaps["Joystick1"], Game.getSpawnPoint(10), new Rect(0, 0.505f, 1, 0.49f));
         }
 
         private Player SpawnPlayer(PlayerInputs controls, Vector3 position, Rect cameraRect)
@@ -47,6 +47,21 @@ namespace UnrealTortlement
             Game.players.Add(player);
 
             return player;
+        }
+
+        public void respawnPlayer(Player player)
+        {
+            StartCoroutine(respawnDelay(player, 2));
+        }
+
+        public IEnumerator respawnDelay(Player player, float delay)
+        {
+            player.gameObject.SetActive(false);
+            yield return new WaitForSeconds(delay);
+
+            player.transform.position = Game.getSpawnPoint(10);
+
+            player.gameObject.SetActive(true);
         }
     }
 }

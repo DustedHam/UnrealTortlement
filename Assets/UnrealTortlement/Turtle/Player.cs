@@ -11,6 +11,10 @@ namespace UnrealTortlement.Turtle
     [RequireComponent(typeof(Rigidbody))]
     public class Player : MonoBehaviour
     {
+        public Action<string> onKilled;
+        public Action<float, float> onHealthChange;
+        public Action<Weapon> onWeaponChange;
+
         [SerializeField]
         public Camera _camera;
 
@@ -40,6 +44,11 @@ namespace UnrealTortlement.Turtle
 
         public PlayerInputs _controls;
 
+        [SerializeField]
+        private Animator animator;
+    //    [SerializeField]
+    //    private Transform model;
+
         [SerializeField, ReadOnlyField]
         private Vector3 inputs = Vector3.zero;
 
@@ -48,18 +57,35 @@ namespace UnrealTortlement.Turtle
         
         [SerializeField, ReadOnlyField]
         private bool isGrounded = true;
-
-        
+  
         [SerializeField, ReadOnlyField]
         private int[] ammo;
         private List<Weapon> inventory;
         private int weaponIndex = -1;
+        
+        public float maxHealth;
+        [SerializeField, ReadOnlyField]
+        private float _health;
+        public float Health
+        {
+            get { return _health; }
+            private set
+            {
+                if (_health != value)
+                {
+                    onHealthChange?.Invoke(value, _health);
+                }
+                _health = value;
+            }
+        }
+
+        public string playerName;
 
         private int ignoreMask;
 
         public bool isAlive
         {
-            get { return true; }
+            get { return Health <= 0; }
         }
 
         private void Start()
@@ -69,6 +95,8 @@ namespace UnrealTortlement.Turtle
 
             ammo = new int[Enum.GetNames(typeof(AmmoType)).Length];
             inventory = new List<Weapon>();
+
+            Health = maxHealth;
         }
 
         private void OnEnable()
@@ -94,6 +122,7 @@ namespace UnrealTortlement.Turtle
                 if(weaponIndex == -1)
                 {
                     weaponIndex = 0;
+                    onWeaponChange?.Invoke(weap);
                 }
                 else
                 {
@@ -115,6 +144,33 @@ namespace UnrealTortlement.Turtle
             return false;
         }
 
+        public void hurt(float value, string sender)
+        {
+            Health = Mathf.Max(Health - value, 0);
+            if(Health == 0)
+            {
+                onKilled?.Invoke(sender);
+                //SPAWN GIBS
+
+                //SHOW RESPAWN UI
+
+                Game.respawnPlayer(this);
+                //reset
+                Health = maxHealth;
+                weaponIndex = -1;
+                for (int i = 0; i < inventory.Count; i++)
+                {
+                    Destroy(inventory[i].gameObject);
+                }
+                inventory.Clear();
+            }
+        }
+
+        public void heal(float value)
+        {
+            Health = Mathf.Min(Health + value, maxHealth);
+        }
+
         private void Update()
         {
             Transform cameraTransfrom = _camera.transform;
@@ -130,6 +186,10 @@ namespace UnrealTortlement.Turtle
             float vertical = Input.GetAxis(_controls.Vertical);
             inputs = (cameraForward * vertical) + (cameraRight * horizontal);
 
+            //model.forward = (transform.forward * vertical) + (transform.right * horizontal);
+
+            animator.SetBool("Walking", (inputs.sqrMagnitude > 0.1f));
+
             if (Input.GetButtonDown(_controls.Jump) && isGrounded)
             {
                 _rigidbody.AddForce(Vector3.up * Mathf.Sqrt(_jumpHeight * -2f * Physics.gravity.y), ForceMode.VelocityChange);
@@ -138,16 +198,25 @@ namespace UnrealTortlement.Turtle
             if (weaponIndex > -1)
             {
                 Weapon current = inventory[weaponIndex];
-                
 
-                if (Input.GetButtonDown(_controls.Fire))
+                bool fire = false;
+                if (current._fireMode == FireMode.Auto)
+                {
+                    fire = Input.GetButton(_controls.Fire);
+                }
+                else
+                {
+                    fire = Input.GetButtonDown(_controls.Fire);
+                }
+
+                if (fire)
                 {
                     Cursor.lockState = CursorLockMode.Locked;
                     int currentAmmo = ammo[(int)current._ammoType];
 
                     if (currentAmmo >= current._ammoCost)
                     {
-                        if (current.tryFire())
+                        if (current.tryFire(playerName))
                         {
                             currentAmmo -= current._ammoCost;
                         }

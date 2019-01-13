@@ -1,11 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnrealTortlement.Turtle;
 
 namespace UnrealTortlement.Projectiles
 {
     public class Projectile : MonoBehaviour
     {
+        private static float MIN_SPEED = 5;
+
         [SerializeField]
         private int ricochet = 2;
         [SerializeField]
@@ -13,11 +16,16 @@ namespace UnrealTortlement.Projectiles
 
         private ProjectilePool pool;
 
-        private int hitCount;
+        private string owner;
 
-        public void init(ProjectilePool pool, Vector3 position, Vector3 velocity)
+        private int hitCount;
+        private float damage;
+
+        public void init(ProjectilePool pool, Vector3 position, Vector3 velocity, float damage, string owner)
         {
             this.pool = pool;
+            this.damage = damage;
+            this.owner = owner;
             transform.position = position;
             _rigidbody.velocity = velocity;
 
@@ -40,7 +48,11 @@ namespace UnrealTortlement.Projectiles
 
                 if(hit.transform.tag == "Player")
                 {
-                    Debug.Log("player hit");
+                    Player player = hit.transform.GetComponent<Player>();
+                    if(velocity.magnitude > MIN_SPEED)
+                    {
+                        player.hurt(damage, owner);
+                    }  
                 }
 
                 if (hitCount > ricochet)

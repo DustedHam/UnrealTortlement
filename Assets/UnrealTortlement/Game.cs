@@ -1,4 +1,5 @@
 ﻿using SaltboxGames.Common.Utils;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -30,6 +31,11 @@ namespace UnrealTortlement
             initControlMaps();
         }
 
+        public static void respawnPlayer(Player player)
+        {
+            manager.respawnPlayer(player);
+        }
+
         public static Weapon SpawnRandomWeapon(Vector3 position)
         {
             GameObject obj = GameObject.Instantiate(manager.WeaponPrefabs.GetRandom(), position, Quaternion.identity);
@@ -40,7 +46,7 @@ namespace UnrealTortlement
 
         public static Vector3 getSpawnPoint(float minDistance)
         {
-            int start = Random.Range(0, spawnPoints.Count);
+            int start = UnityEngine.Random.Range(0, spawnPoints.Count);
             Vector3 point = Vector3.zero;
 
             for (int i = 0; i < spawnPoints.Count; i++)

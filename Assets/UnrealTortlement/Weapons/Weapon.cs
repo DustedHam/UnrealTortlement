@@ -4,6 +4,13 @@ using UnityEngine;
 
 namespace UnrealTortlement.Weapons
 {
+    public enum FireMode
+    {
+        Single,
+        Burst,
+        Auto
+    }
+
     public class Weapon : MonoBehaviour
     {
         [SerializeField]
@@ -11,26 +18,40 @@ namespace UnrealTortlement.Weapons
         [SerializeField]
         private float _muzzleVelocity;
 
+        [SerializeField]
+        private float damage;
+
         public int _ammoWorth;
         public int _ammoCost;
         public AmmoType _ammoType;
 
-        public bool _isAuto;
+        public FireMode _fireMode;
         [SerializeField]
         private float _coolDownTime;
+        [SerializeField]
+        private float _burstDelay;
+        [SerializeField]
+        private int _burstCount;
 
         private bool canFire = true;
 
-        public bool tryFire()
+        public bool tryFire(string owner)
         {
             if(!canFire)
             {
                 return false;
             }
 
-            Game.bulletPool.spawn(_spawnPoint.position, transform.forward * _muzzleVelocity);
+            if(_fireMode == FireMode.Burst)
+            {
+                StartCoroutine(BurstFire(_burstDelay, _burstCount, owner));
+            }
+            else
+            {
+                Game.bulletPool.spawn(_spawnPoint.position, transform.forward * _muzzleVelocity, damage, owner); 
+            }
 
-            if(_coolDownTime > 0)
+            if (_coolDownTime > 0)
             {
                 StartCoroutine(CoolDown(_coolDownTime));
             }
@@ -42,6 +63,16 @@ namespace UnrealTortlement.Weapons
             canFire = false;
             yield return new WaitForSeconds(time);
             canFire = true;
+        }
+
+        private IEnumerator BurstFire(float time, int count, string owner)
+        {
+            WaitForSeconds delay = new WaitForSeconds(time);
+            for (int i = 0; i < count; i++)
+            {
+                Game.bulletPool.spawn(_spawnPoint.position, transform.forward * _muzzleVelocity, damage, owner);
+                yield return delay;
+            }
         }
     }
 }

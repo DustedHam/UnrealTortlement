@@ -16,12 +16,12 @@ namespace UnrealTortlement.Projectiles
             pool = new Pool<Projectile>(createBullet);
         }
 
-        public Projectile spawn(Vector3 position, Vector3 velocity)
+        public Projectile spawn(Vector3 position, Vector3 velocity, float damage, string owner)
         {
             Projectile projectile = pool.Take();
             projectile.gameObject.SetActive(true);
             projectile.transform.forward = velocity.normalized;
-            projectile.init(this, position, velocity);
+            projectile.init(this, position, velocity, damage, owner);
             return projectile;
         }
 
