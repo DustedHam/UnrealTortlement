@@ -15,6 +15,7 @@ namespace UnrealTortlement.Weapons
     public class Weapon : MonoBehaviour
     {
         public Action<int> onAmmoChange;
+        public Action<bool> onReloadState;
 
         public string _name;
 
@@ -46,7 +47,16 @@ namespace UnrealTortlement.Weapons
 
         private bool canFire = true;
         [SerializeField]
-        public bool isReloading = false;
+        private bool _isReloading = false;
+        public bool isReloading
+        {
+            get => _isReloading;
+            set
+            {
+                _isReloading = value;
+                onReloadState?.Invoke(true);
+            }
+        }
 
         public bool tryFire(string owner)
         {
