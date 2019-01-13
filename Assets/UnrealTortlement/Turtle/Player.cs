@@ -34,10 +34,6 @@ namespace UnrealTortlement.Turtle
         private LayerMask _ground;
 
         [SerializeField]
-        public float camera_speedH = 2.0f;
-        [SerializeField]
-        public float camera_speedV = 2.0f;
-        [SerializeField]
         private float yaw = 0.0f;
         [SerializeField]
         private float pitch = 0.0f;
@@ -60,6 +56,11 @@ namespace UnrealTortlement.Turtle
         private int weaponIndex = -1;
 
         private int ignoreMask;
+
+        public bool isAlive
+        {
+            get { return true; }
+        }
 
         private void Start()
         {
@@ -119,7 +120,7 @@ namespace UnrealTortlement.Turtle
             Transform cameraTransfrom = _camera.transform;
             Vector3 cameraPosition = cameraTransfrom.position;
             Vector3 cameraForward = cameraTransfrom.forward;
-            Vector3 cameraRight= cameraTransfrom.right;
+            Vector3 cameraRight = cameraTransfrom.right;
 
             isGrounded = Physics.CheckSphere(_groundCheck.position, _groundDistance, _ground, QueryTriggerInteraction.Ignore);
 
@@ -137,14 +138,14 @@ namespace UnrealTortlement.Turtle
             if (weaponIndex > -1)
             {
                 Weapon current = inventory[weaponIndex];
-                current.transform.position = _weaponPoint.position;
+                
 
                 if (Input.GetButtonDown(_controls.Fire))
                 {
                     Cursor.lockState = CursorLockMode.Locked;
                     int currentAmmo = ammo[(int)current._ammoType];
 
-                    if(currentAmmo >= current._ammoCost)
+                    if (currentAmmo >= current._ammoCost)
                     {
                         if (current.tryFire())
                         {
@@ -154,7 +155,7 @@ namespace UnrealTortlement.Turtle
 
                     ammo[(int)current._ammoType] = currentAmmo;
                 }
-           
+
                 RaycastHit hit;
                 if (Physics.Raycast(cameraPosition, cameraForward, out hit, Mathf.Infinity, ignoreMask))
                 {
@@ -165,19 +166,19 @@ namespace UnrealTortlement.Turtle
                     current.transform.LookAt(cameraForward * 100); //TODO: Lerp to this;
                 }
 
+                current.transform.position = _weaponPoint.position;
                 Debug.DrawRay(cameraPosition, cameraForward * 1000, Color.red);
             }
 
             // Camera rotation
             _camera.transform.position = _cameraPoint.position;
 
-            yaw += camera_speedH * Input.GetAxis("Mouse X");
-            pitch -= camera_speedV * Input.GetAxis("Mouse Y");
+            yaw += _controls.AimSensitivity * Input.GetAxis(_controls.Yaw);
+            pitch -= _controls.AimSensitivity * Input.GetAxis(_controls.Pitch);
             pitch = Mathf.Clamp(pitch, -35, 75);
 
             transform.eulerAngles = new Vector3(0, yaw, 0);
             _camera.transform.eulerAngles = new Vector3(pitch, yaw, 0.0f);
-
 
             if (Input.GetKey(KeyCode.Escape))
             {

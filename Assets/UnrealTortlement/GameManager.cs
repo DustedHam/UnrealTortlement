@@ -18,8 +18,6 @@ namespace UnrealTortlement
         private void OnEnable()
         {
             Game.Init(this);
-
-
         }
 
         private void Start()
@@ -29,10 +27,11 @@ namespace UnrealTortlement
 
         private void StartGame()
         {
-            SpawnPlayer(new PlayerInputs(), Game.spawnPoints.GetRandom().Point);
+            SpawnPlayer(Game.controlMaps["Keyboard"], Game.getSpawnPoint(10), new Rect(0, 0, 1, 0.5f));
+            SpawnPlayer(Game.controlMaps["Joystick1"], Game.getSpawnPoint(10), new Rect(0, 0.5f, 1, 0.5f));
         }
 
-        private Player SpawnPlayer(PlayerInputs controls, Vector3 position)
+        private Player SpawnPlayer(PlayerInputs controls, Vector3 position, Rect cameraRect)
         {
             GameObject obj = GameObject.Instantiate(PlayerPrefab);
             obj.transform.position = position;
@@ -40,9 +39,12 @@ namespace UnrealTortlement
 
             GameObject camObj = GameObject.Instantiate(PlayerCameraPrefab);
             Camera camera = camObj.GetComponent<Camera>();
+            camera.rect = cameraRect;
 
             player._controls = controls;
             player._camera = camera;
+
+            Game.players.Add(player);
 
             return player;
         }

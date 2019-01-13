@@ -41,7 +41,7 @@ namespace UnrealTortlement.LevelTools
 
         private void OnTriggerEnter(Collider other)
         {
-            if(other.tag == "Player")
+            if(current != null && other.tag == "Player")
             {
                 Player player = other.GetComponent<Player>();
                 assignWeapon(player);
