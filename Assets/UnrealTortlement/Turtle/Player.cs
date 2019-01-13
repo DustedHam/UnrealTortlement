@@ -251,6 +251,7 @@ namespace UnrealTortlement.Turtle
             if (weaponIndex > -1)
             {
                 Weapon current = inventory[weaponIndex];
+                bool reload = Input.GetButtonDown(_controls.Reload);
 
                 bool fire = false;
                 if (current._fireMode == FireMode.Auto)
@@ -262,21 +263,32 @@ namespace UnrealTortlement.Turtle
                     fire = Input.GetButtonDown(_controls.Fire);
                 }
 
-                if (fire)
+                if (fire && !current.isReloading)
                 {
                     Cursor.lockState = CursorLockMode.Locked;
-                    int currentAmmo = ammo[(int)current._ammoType];
+                    current.tryFire(_name);
 
-                    if (currentAmmo >= current._ammoCost)
+                    if(current._ammoCount == 0)
                     {
-                        if (current.tryFire(_name))
-                        {
-                            currentAmmo -= current._ammoCost;
-                        }
+                        reload = true;
                     }
+                }
 
-                    ammo[(int)current._ammoType] = currentAmmo;
-                    onAmmoChange?.Invoke((int)current._ammoType, currentAmmo);
+                if (reload)
+                {             
+                    int cAmmo = ammo[(int)current._ammoType];
+                    int reloadNeed = (current._clipSize - current._ammoCount);
+                    if (cAmmo < reloadNeed)
+                    {
+                        current.Reload(cAmmo);
+                        cAmmo = 0;
+                    }
+                    else
+                    {
+                        cAmmo -= reloadNeed;
+                        current.Reload(current._clipSize);
+                    }
+                    ammo[(int)current._ammoType] = cAmmo;
                 }
 
                 RaycastHit hit;

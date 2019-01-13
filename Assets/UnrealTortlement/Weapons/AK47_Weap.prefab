@@ -81,11 +81,15 @@ MonoBehaviour:
   damage: 25
   _ammoWorth: 30
   _ammoCost: 3
+  _clipSize: 15
+  _ammoCount: 0
   _ammoType: 0
   _fireMode: 1
   _coolDownTime: 0.4
   _burstDelay: 0.1
   _burstCount: 3
+  _reloadTime: 1
+  isReloading: 0
 --- !u!1001 &2267313112059115746
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -1,4 +1,5 @@
 ﻿using SaltboxGames.Common.Utils;
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -13,6 +14,8 @@ namespace UnrealTortlement.Weapons
 
     public class Weapon : MonoBehaviour
     {
+        public Action<int> onAmmoChange;
+
         public string _name;
 
         [SerializeField]
@@ -25,6 +28,9 @@ namespace UnrealTortlement.Weapons
 
         public int _ammoWorth;
         public int _ammoCost;
+        public int _clipSize;
+        [ReadOnlyField]
+        public int _ammoCount;
         public AmmoType _ammoType;
 
         public FireMode _fireMode;
@@ -35,7 +41,12 @@ namespace UnrealTortlement.Weapons
         [SerializeField]
         private int _burstCount;
 
+        [SerializeField]
+        private float _reloadTime;
+
         private bool canFire = true;
+        [SerializeField]
+        public bool isReloading = false;
 
         public bool tryFire(string owner)
         {
@@ -44,13 +55,18 @@ namespace UnrealTortlement.Weapons
                 return false;
             }
 
-            if(_fireMode == FireMode.Burst)
+            if(_ammoCount == 0)
+            {
+                return false;
+            }
+
+            if (_fireMode == FireMode.Burst)
             {
                 StartCoroutine(BurstFire(_burstDelay, _burstCount, owner));
             }
             else
             {
-                Game.bulletPool.spawn(_spawnPoint.position, transform.forward * _muzzleVelocity, damage, owner); 
+                spawnBullet(owner);
             }
 
             if (_coolDownTime > 0)
@@ -60,6 +76,20 @@ namespace UnrealTortlement.Weapons
             return true;            
         }
 
+        public void Reload(int ammoCount)
+        {
+            Debug.Log(ammoCount);
+            _ammoCount = ammoCount;
+            StartCoroutine(ReloadTime(_reloadTime));
+        }
+
+        private void spawnBullet(string owner)
+        {
+            Game.bulletPool.spawn(_spawnPoint.position, transform.forward * _muzzleVelocity, damage, owner);
+            _ammoCount--;
+            onAmmoChange?.Invoke(_ammoCount);
+        }
+
         private IEnumerator CoolDown(float time)
         {
             canFire = false;
@@ -67,12 +97,23 @@ namespace UnrealTortlement.Weapons
             canFire = true;
         }
 
+        private IEnumerator ReloadTime(float time)
+        {
+            isReloading = true;
+            yield return new WaitForSeconds(time);
+            isReloading = false;
+        }
+
         private IEnumerator BurstFire(float time, int count, string owner)
         {
             WaitForSeconds delay = new WaitForSeconds(time);
             for (int i = 0; i < count; i++)
             {
-                Game.bulletPool.spawn(_spawnPoint.position, transform.forward * _muzzleVelocity, damage, owner);
+                spawnBullet(owner);
+                if (_ammoCount == 0)
+                {
+                    break;
+                }
                 yield return delay;
             }
         }

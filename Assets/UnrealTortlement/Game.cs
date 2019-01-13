@@ -106,7 +106,8 @@ namespace UnrealTortlement
                 Fire = "Fire1",
                 Yaw = "Mouse X",
                 Pitch = "Mouse Y",
-                ChangeWeap = "CWeap"
+                ChangeWeap = "CWeap",
+                Reload = "Reload",
             });
             controlMaps.Add("Joystick1", new PlayerInputs()
             {
@@ -118,7 +119,8 @@ namespace UnrealTortlement
                 Fire = "Joystick1-Fire",
                 Yaw = "Joystick1-ViewX",
                 Pitch = "Joystick1-ViewY",
-                ChangeWeap = "Joystick1-CWeap"
+                ChangeWeap = "Joystick1-CWeap",
+                Reload = "Joystick1-Reload"
             });
             controlMaps.Add("Joystick2", new PlayerInputs()
             {
@@ -130,7 +132,9 @@ namespace UnrealTortlement
                 Fire = "Joystick2-Fire",
                 Yaw = "Joystick2-ViewX",
                 Pitch = "Joystick2-ViewY",
-                ChangeWeap = "Joystick2-CWeap"
+                ChangeWeap = "Joystick2-CWeap",
+                Reload = "Joystick2-Reload"
+
             });
         }
     }

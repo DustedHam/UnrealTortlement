@@ -51,11 +51,15 @@ MonoBehaviour:
   damage: 20
   _ammoWorth: 10
   _ammoCost: 1
+  _clipSize: 7
+  _ammoCount: 0
   _ammoType: 0
   _fireMode: 0
   _coolDownTime: 0.1
   _burstDelay: 0
   _burstCount: 0
+  _reloadTime: 1
+  isReloading: 0
 --- !u!1 &2221181002963892897
 GameObject:
   m_ObjectHideFlags: 0
