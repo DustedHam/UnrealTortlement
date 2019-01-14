@@ -12,6 +12,7 @@ namespace UnrealTortlement
 
         public GameObject PlayerPrefab;
         public GameObject PlayerCameraPrefab;
+        public GameObject PlayerUiPrefab;
 
         public GameObject[] WeaponPrefabs;
 
@@ -25,7 +26,7 @@ namespace UnrealTortlement
 
         private void Start()
         {
-            StartGame();
+            // StartGame();
         }
 
         private void StartGame()
@@ -43,6 +44,9 @@ namespace UnrealTortlement
             GameObject camObj = GameObject.Instantiate(PlayerCameraPrefab);
             Camera camera = camObj.GetComponent<Camera>();
             camera.rect = cameraRect;
+
+            GameObject uiObj = GameObject.Instantiate(PlayerUiPrefab);
+            UIController uiController = uiObj.GetComponent<UIController>();
 
             player._controls = controls;
             player._camera = camera;

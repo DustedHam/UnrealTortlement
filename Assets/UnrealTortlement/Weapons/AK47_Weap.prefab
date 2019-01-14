@@ -77,7 +77,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _name: AK-74
   _spawnPoint: {fileID: 2267313111319038474}
-  _muzzleVelocity: 50
+  _muzzleVelocity: 25
   damage: 25
   _ammoWorth: 30
   _ammoCost: 3
@@ -89,7 +89,7 @@ MonoBehaviour:
   _burstDelay: 0.1
   _burstCount: 3
   _reloadTime: 1
-  isReloading: 0
+  _isReloading: 0
 --- !u!1001 &2267313112059115746
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -97,10 +97,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2267313112041242684}
     m_Modifications:
-    - target: {fileID: 100000, guid: af2b35b41c87ef44990c0b615f37a96a, type: 3}
-      propertyPath: m_Name
-      value: AK47
-      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: af2b35b41c87ef44990c0b615f37a96a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -156,6 +152,10 @@ PrefabInstance:
     - target: {fileID: 400000, guid: af2b35b41c87ef44990c0b615f37a96a, type: 3}
       propertyPath: m_LocalScale.z
       value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: af2b35b41c87ef44990c0b615f37a96a, type: 3}
+      propertyPath: m_Name
+      value: AK47
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: af2b35b41c87ef44990c0b615f37a96a, type: 3}

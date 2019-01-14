@@ -7,19 +7,13 @@ using UnrealTortlement.Weapons;
 
 public class TitleScene : MonoBehaviour
 {
-    [SerializeField]
-    Weapon weapon;
+
+    [SerializeField]Weapon AK;
 
     void Awake()
     {
-        weapon.gameObject.SetActive(false);
-        weapon.Reload(15);
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+        AK.gameObject.SetActive(false);
+        AK._ammoCount = 30;
     }
 
     public void ChangeScene(string scene)
@@ -29,7 +23,7 @@ public class TitleScene : MonoBehaviour
 
     public void Play()
     {
-        weapon.gameObject.SetActive(true);
+        AK.gameObject.SetActive(true);
         StartCoroutine("PlayCoroutine");
     }
 
@@ -37,10 +31,15 @@ public class TitleScene : MonoBehaviour
     {
         for(var i = 0; i < 5;i++)
         {
-            weapon.tryFire("");
-            yield return new WaitForSeconds(0.5f);           
-            weapon.tryFire("");
+            AK.tryFire("");
+            yield return new WaitForSeconds(0.5f);
+            AK.tryFire("");
         }
         ChangeScene("map1");
+    }
+
+    public void Quit()
+    {
+        Application.Quit();
     }
 }
