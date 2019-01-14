@@ -58,6 +58,10 @@ namespace UnrealTortlement.Weapons
             }
         }
 
+        [SerializeField]
+        private AudioClip firing, clip, reload;
+
+
         public bool tryFire(string owner)
         {
             if(!canFire)
@@ -88,13 +92,13 @@ namespace UnrealTortlement.Weapons
 
         public void Reload(int ammoCount)
         {
-            Debug.Log(ammoCount);
             _ammoCount = ammoCount;
             StartCoroutine(ReloadTime(_reloadTime));
         }
 
         private void spawnBullet(string owner)
         {
+            Game.playSound(firing);
             Game.bulletPool.spawn(_spawnPoint.position, transform.forward * _muzzleVelocity, damage, owner);
             _ammoCount--;
             onAmmoChange?.Invoke(_ammoCount);
@@ -109,9 +113,11 @@ namespace UnrealTortlement.Weapons
 
         private IEnumerator ReloadTime(float time)
         {
+            Game.playSound(reload);
             isReloading = true;
             yield return new WaitForSeconds(time);
             isReloading = false;
+            onAmmoChange?.Invoke(_ammoCount);
         }
 
         private IEnumerator BurstFire(float time, int count, string owner)

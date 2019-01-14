@@ -90,6 +90,9 @@ MonoBehaviour:
   _burstCount: 3
   _reloadTime: 1
   _isReloading: 0
+  firing: {fileID: 8300000, guid: 2663b52de5e58e243877735a40c23a8d, type: 3}
+  clip: {fileID: 8300000, guid: 10abe316145375c439a2327e3b6ac780, type: 3}
+  reload: {fileID: 8300000, guid: 17c77f95b5352bd44b6b2a7ecdef8eb7, type: 3}
 --- !u!1001 &2267313112059115746
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -97,6 +100,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2267313112041242684}
     m_Modifications:
+    - target: {fileID: 100000, guid: af2b35b41c87ef44990c0b615f37a96a, type: 3}
+      propertyPath: m_Name
+      value: AK47
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: af2b35b41c87ef44990c0b615f37a96a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -152,10 +159,6 @@ PrefabInstance:
     - target: {fileID: 400000, guid: af2b35b41c87ef44990c0b615f37a96a, type: 3}
       propertyPath: m_LocalScale.z
       value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 100000, guid: af2b35b41c87ef44990c0b615f37a96a, type: 3}
-      propertyPath: m_Name
-      value: AK47
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: af2b35b41c87ef44990c0b615f37a96a, type: 3}

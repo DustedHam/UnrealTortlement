@@ -20,6 +20,8 @@ namespace UnrealTortlement
         
         public bool spawnOnStart;
 
+        public AudioSource source;
+
         private void OnEnable()
         {
             Game.Init(this);
@@ -35,11 +37,15 @@ namespace UnrealTortlement
 
         public void StartGame()
         {
-            SpawnPlayer(Game.controlMaps["Keyboard"], Game.getSpawnPoint(10), new Rect(0, 0, 1, 0.49f), "Player1");
-            SpawnPlayer(Game.controlMaps["Joystick1"], Game.getSpawnPoint(10), new Rect(0, 0.505f, 1, 0.49f), "Player2");
+            GameObject uiObj = GameObject.Instantiate(PlayerUiPrefab);
+            UIController top = uiObj.transform.GetChild(0).GetComponent<UIController>();
+            UIController bottom = uiObj.transform.GetChild(1).GetComponent<UIController>();
+
+            SpawnPlayer(Game.controlMaps["Keyboard"], Game.getSpawnPoint(10), new Rect(0, 0, 1, 0.5f), top, "Player1");
+            SpawnPlayer(Game.controlMaps["Joystick1"], Game.getSpawnPoint(10), new Rect(0, 0.5f, 1, 0.5f), bottom, "Player2");
         }
 
-        private Player SpawnPlayer(PlayerInputs controls, Vector3 position, Rect cameraRect, string name)
+        private Player SpawnPlayer(PlayerInputs controls, Vector3 position, Rect cameraRect, UIController ui, string name)
         {
             GameObject obj = GameObject.Instantiate(PlayerPrefab);
             obj.transform.position = position;
@@ -48,14 +54,6 @@ namespace UnrealTortlement
             GameObject camObj = GameObject.Instantiate(PlayerCameraPrefab);
             Camera camera = camObj.GetComponent<Camera>();
             camera.rect = cameraRect;
-
-            /*
-            GameObject uiObj = GameObject.Instantiate(PlayerUiPrefab);
-            UIController uiController = uiObj.GetComponent<UIController>();
-            uiController.SetPlayers(player);
-
-            uiObj.GetComponent<Canvas>().worldCamera = camera;
-            */
 
             player._controls = controls;
             player._camera = camera;
@@ -70,7 +68,7 @@ namespace UnrealTortlement
             };
 
             Game.players.Add(player);
-
+            ui.SetPlayers(player);
             return player;
         }
 

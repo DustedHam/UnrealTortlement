@@ -52,7 +52,11 @@ namespace UnrealTortlement
 
         private void OnWeaponChange(Weapon weapon)
         {
-            currentWeapon.onAmmoChange -= OnWeaponAmmoChange;
+            if(currentWeapon != null)
+            {
+                currentWeapon.onAmmoChange -= OnWeaponAmmoChange;
+            }
+            
             currentWeapon = weapon;
             weapon.onAmmoChange += OnWeaponAmmoChange;
             currentClip.text = weapon._ammoCount + "/" + weapon._clipSize;

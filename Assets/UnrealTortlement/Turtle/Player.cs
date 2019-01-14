@@ -124,6 +124,7 @@ namespace UnrealTortlement.Turtle
         public void PickUpWeapon(Weapon weap)
         {
             ammo[(int)weap._ammoType] += weap._ammoWorth;
+            onAmmoChange?.Invoke((int)weap._ammoType, ammo[(int)weap._ammoType]);
             if (hasWeapon(weap))
             {
                 Destroy(weap.gameObject);
@@ -320,6 +321,7 @@ namespace UnrealTortlement.Turtle
                         current.Reload(current._clipSize);
                     }
                     ammo[(int)current._ammoType] = cAmmo;
+                    onAmmoChange?.Invoke((int)current._ammoType, cAmmo);
                 }
 
                 RaycastHit hit;

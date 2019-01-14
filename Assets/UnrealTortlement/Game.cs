@@ -46,6 +46,11 @@ namespace UnrealTortlement
             manager.respawnPlayer(player);
         }
 
+        public static void playSound(AudioClip clip)
+        {
+            manager.source.PlayOneShot(clip);
+        }
+
         public static Weapon SpawnRandomWeapon(Vector3 position)
         {
             GameObject obj = GameObject.Instantiate(manager.WeaponPrefabs.GetRandom(), position, Quaternion.identity);

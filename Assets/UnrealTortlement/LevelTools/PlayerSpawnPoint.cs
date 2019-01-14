@@ -28,7 +28,7 @@ namespace UnrealTortlement.LevelTools
         private void OnDrawGizmos()
         {
             Gizmos.color = debugColor;
-            Gizmos.DrawCube(transform.position, transform.localScale * 0.99f);
+        //    Gizmos.DrawCube(transform.position, transform.localScale * 0.99f);
         }
 #endif
     }
