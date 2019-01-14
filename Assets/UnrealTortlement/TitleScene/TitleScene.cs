@@ -13,13 +13,7 @@ public class TitleScene : MonoBehaviour
     void Awake()
     {
         AK.gameObject.SetActive(false);
-        AK.Reload();
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+        AK._ammoCount = 30;
     }
 
     public void ChangeScene(string scene)
@@ -30,21 +24,22 @@ public class TitleScene : MonoBehaviour
     public void Play()
     {
         AK.gameObject.SetActive(true);
-        startCoroutine("PlayCoroutine");
+        StartCoroutine("PlayCoroutine");
     }
 
     IEnumerator PlayCoroutine()
     {
         for(var i = 0; i < 5;i++)
         {
-            AK.tryFire();
-            var startTime = Time.deltaTime;
-            while(startTime.deltaTime - startTime < 0.5)
-            {
-                yield return null;
-            }
-            AK.tryFire();
+            AK.tryFire("");
+            yield return new WaitForSeconds(0.5f);
+            AK.tryFire("");
         }
         ChangeScene("map1");
+    }
+
+    public void Quit()
+    {
+        Application.Quit();
     }
 }
