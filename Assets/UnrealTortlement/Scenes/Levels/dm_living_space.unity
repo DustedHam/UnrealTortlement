@@ -18576,7 +18576,7 @@ PrefabInstance:
     - target: {fileID: 8150337581800076755, guid: 12533a682b7042847a92e401fd6bd7cd,
         type: 3}
       propertyPath: scoreToWin
-      value: 1
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 8150337581800076755, guid: 12533a682b7042847a92e401fd6bd7cd,
         type: 3}
