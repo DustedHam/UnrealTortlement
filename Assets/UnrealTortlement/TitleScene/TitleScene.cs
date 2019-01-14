@@ -35,7 +35,8 @@ public class TitleScene : MonoBehaviour
             yield return new WaitForSeconds(0.5f);
             AK.tryFire("");
         }
-        ChangeScene("map1");
+        yield return new WaitForSeconds(0.01f);
+        ChangeScene("dm_living_space");
     }
 
     public void Quit()

@@ -4,4 +4,17 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/UnrealTortlement/Scenes/TitleScene.unity
+    guid: 40232a62841f1324aacdf6ceb95b6de1
+  - enabled: 1
+    path: Assets/UnrealTortlement/Scenes/HowToPlayScene.unity
+    guid: 840e83e100ba62d4aac53b367a75a37a
+  - enabled: 1
+    path: Assets/UnrealTortlement/Scenes/CreditsScene.unity
+    guid: 7170bc192f26af04e854383904c0ba02
+  - enabled: 1
+    path: Assets/UnrealTortlement/Scenes/Levels/dm_living_space.unity
+    guid: 68db7542aaf9d7e41b96f056584b1a7d
+  m_configObjects: {}

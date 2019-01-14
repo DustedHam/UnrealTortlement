@@ -18,6 +18,7 @@ namespace UnrealTortlement
 
         public int scoreToWin = 10;
         
+        public bool spawnOnStart;
 
         private void OnEnable()
         {
@@ -26,10 +27,13 @@ namespace UnrealTortlement
 
         private void Start()
         {
-            // StartGame();
+            if(spawnOnStart)
+            {
+                StartGame();
+            }    
         }
 
-        private void StartGame()
+        public void StartGame()
         {
             SpawnPlayer(Game.controlMaps["Keyboard"], Game.getSpawnPoint(10), new Rect(0, 0, 1, 0.49f), "Player1");
             SpawnPlayer(Game.controlMaps["Joystick1"], Game.getSpawnPoint(10), new Rect(0, 0.505f, 1, 0.49f), "Player2");
@@ -45,8 +49,13 @@ namespace UnrealTortlement
             Camera camera = camObj.GetComponent<Camera>();
             camera.rect = cameraRect;
 
+            /*
             GameObject uiObj = GameObject.Instantiate(PlayerUiPrefab);
             UIController uiController = uiObj.GetComponent<UIController>();
+            uiController.SetPlayers(player);
+
+            uiObj.GetComponent<Canvas>().worldCamera = camera;
+            */
 
             player._controls = controls;
             player._camera = camera;
