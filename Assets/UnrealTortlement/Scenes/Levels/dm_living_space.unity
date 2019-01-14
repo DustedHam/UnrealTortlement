@@ -20,7 +20,7 @@ RenderSettings:
   m_FogDensity: 0.01
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
-  m_AmbientSkyColor: {r: 0.21698111, g: 0.21698111, b: 0.21698111, a: 1}
+  m_AmbientSkyColor: {r: 0.4245283, g: 0.4245283, b: 0.4245283, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
   m_AmbientIntensity: 1
@@ -56,7 +56,7 @@ LightmapSettings:
   m_LightmapEditorSettings:
     serializedVersion: 10
     m_Resolution: 2
-    m_BakeResolution: 2
+    m_BakeResolution: 5
     m_AtlasSize: 512
     m_AO: 1
     m_AOMaxDistance: 1
@@ -12187,7 +12187,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-31282
+  m_Name: pb_Mesh52470
   serializedVersion: 9
   m_SubMeshes:
   - serializedVersion: 2
@@ -18571,6 +18571,11 @@ PrefabInstance:
     - target: {fileID: 8150337581800076755, guid: 12533a682b7042847a92e401fd6bd7cd,
         type: 3}
       propertyPath: spawnOnStart
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8150337581800076755, guid: 12533a682b7042847a92e401fd6bd7cd,
+        type: 3}
+      propertyPath: scoreToWin
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []

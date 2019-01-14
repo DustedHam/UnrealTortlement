@@ -17,4 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/UnrealTortlement/Scenes/Levels/dm_living_space.unity
     guid: 68db7542aaf9d7e41b96f056584b1a7d
+  - enabled: 1
+    path: Assets/UnrealTortlement/Scenes/VictoryScene.unity
+    guid: 9452a62e9d9f8b54ea674b225a7deeb2
   m_configObjects: {}

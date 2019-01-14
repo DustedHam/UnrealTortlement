@@ -3,7 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 using UnrealTortlement.LevelTools;
 using UnrealTortlement.Projectiles;
 using UnrealTortlement.Turtle;
@@ -34,6 +34,11 @@ namespace UnrealTortlement
             initControlMaps();
 
             playerScores = new Dictionary<string, int>();
+
+            onGameOver += (winner) =>
+            {
+                SceneManager.LoadScene("VictoryScene");
+            };
         }
 
         public static void respawnPlayer(Player player)
